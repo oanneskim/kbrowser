@@ -5,13 +5,9 @@
     <link rel='stylesheet' href='/stylesheets/style.css' />
   </head>
   <body>
-    <h1><%= title %></h1>
-    <p>Welcome to <%= title %></p>
-	<form method="get" action="/bamToBed">
-	interval <input type="search" name="interval">
-	bam url <input type="search" name="bam" value="http://bentleylab.ucdenver.edu/LabUrl/GSM733643_hg19_wgEncodeBroadHistoneK562Pol2bStdAlnRep1.bam">
-	<input type="submit" name="submit" value="go!"> 
-	<br>
-	<%= bed %>
+	<H2> Tools under developement </H2>
+	<% tools.forEach(function(obj){ %>
+		<li><a href="<%= obj.url %>"><%= obj.name %></a></li>
+	<% }) %>
   </body>
 </html>

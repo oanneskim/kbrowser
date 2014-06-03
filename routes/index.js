@@ -4,5 +4,5 @@
  */
 
 exports.index = function(req, res){
-  res.render('index', { title: 'BAM URL', bed: 'BED12 results will be shown here' });
+  res.render('index', { title: 'K-Browser Project' });
 };
