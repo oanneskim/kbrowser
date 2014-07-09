@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title></title>
+    <link rel='stylesheet' href='/stylesheets/style.css' />
+  </head>
+  <body>
+	<H2> K-Browser</H2>
+	<li>gene tracks</li>
+	<% var n= typeof gene_track != 'undefined' ? gene_track.length : 0 %>
+	<% for(var i=0; i< n; i++) { %>
+		<input value="<%= gene_track[i] %>"></input>
+	<% } %>
+	<li>RNASeq tracks</li>
+	<% var n= typeof rnaseq_track!= 'undefined' ? rnaseq_track.length : 0 %>
+	<% for(var i=0; i< n; i++) { %>
+		<input value="<%= rnaseq_track[i] %>"></input>
+	<% } %>
+	<li>Intervals</li>
+	<% var n= typeof interval != 'undefined' ? interval.length : 0 %>
+	<% for(var i=0; i< n; i++) { %>
+		<input value="<%= interval[i] %>"></input>
+	<% } %>
+	<button type="submit" id="submit">Go</button>
+	<textarea id="out"></textarea>
+  </body>
+    <script src="http://d3js.org/d3.v2.js"></script>
+<script src="/javascript/jquery.min.js"></script>
+ 	<script>
+//jQuery(document).ready(function($){
+$(document).ready(function(){
+  $("#submit").click(function(){
+		$.ajax({
+			url: "/bamToBed12",
+			data: { 
+				interval: "chr1:10000-20000",
+				bam: "http://bentleylab.ucdenver.edu/LabUrl/hg19RefGene.bam"},
+			cash: false,
+			type: "GET",
+			success: function(res){
+				$("#out").text(res);
+			},
+			error: function(xhr){
+			}
+		});
+  });
+});
+	</script>
+</html>

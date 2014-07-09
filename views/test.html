@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <script type="text/javascript" src="http://mbostock.github.com/d3/d3.js"></script>
+</head>
+<body>
+<script src="http://d3js.org/d3.v3.js"></script>
+<script>
+   var trackWidth=200,trackHeight=50;
+    var trackId="body";
+    var data=[
+        ["chr1",1000,2000,"gene1",0,"+",1000,2000,0,2, "100,200","0,800"],
+        ["chr1",1500,3000,"gene1",0,"+",1000,2000,0,3, "100,200,1000","0,200,500"]];
+
+    var svg = d3.select("body").append("svg").attr("width",trackWidth).attr("height",trackHeight);
+	var rec = svg.append("rect").attr("x",0).attr("y",0).attr("width",20).attr("height",20);
+	//var svg = d3.select("body").append("svg").attr("width",200).attr("height",200);
+    //var rec = svg.append("rect").attr("x",0).attr("y",0).attr("width",20).attr("height",20);
+</script>
+</body>
+</html>
+
