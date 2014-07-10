@@ -30,7 +30,7 @@ app.use(require('express-jquery')('/jquery.js'));
 if ('development' == app.get('env')) {
   app.use(express.errorHandler());
 }
-app.locals.lineChartHelper = require(path.join(__dirname,'./src/line_chart_helper'));
+//app.locals.lineChartHelper = require(path.join(__dirname,'./src/line_chart_helper'));
 var geneTrack = require('./src/gene_track');
 
 var tools = [
@@ -71,17 +71,12 @@ app.get('/test',
 app.get('/kbrowser', function (req, res) {
 	var gene_track=["http://bentleylab.ucdenver.edu/LabUrl/hg19RefGene.bam"];
 	var rnaseq_track=["http://bentleylab.ucdenver.edu/LabUrl/c41..bam"];
-	var intervals=["chr1:10000-20000"];
 	var fields=[];
 	for( i in gene_track){
         var field={name:'gene_track',type:'search',property:'required',value: gene_track[i]}; 
 		fields.push(field);
 	}
-	for( i in intervals){
-        var field={name:'interval',type:'search',property:'required',value: intervals[i]}; 
-		fields.push(field);
-	}
-	res.render('kbrowser',{ gene_track:gene_track,rnaseq_track:rnaseq_track,interval:intervals});
+	res.render('kbrowser',{ gene_track:gene_track,rnaseq_track:rnaseq_track});
 
 /*
         res.render('form', {
@@ -95,10 +90,10 @@ app.get('/kbrowser', function (req, res) {
 // test
 app.get('/geneTrack',function(req,res){
 	//var data = <%- data %>; //[4, 8, 15, 16, 23, 42];
-	var hm = require('./src/hm_util');
+	//var hm = require('./src/hm_util');
 	var data="chr1	1000	2000	gene1	0	+	1000	2000	0	2	 100,200	0,800\n\
 chr1	1500	3000	gene1	0	+	1000	2000	0	3	100,200,1000	0,200,500";
-	var svg = hm.bed12ToSvg( { data:data, id:"body"});
+	var svg = hm.bed12_to_gene_svg( { data:data, id:"body"});
 	//res.render('gene_track',{ svg:svg });
 	res.send(d3.select('html').node().outerHTML);
 
@@ -157,6 +152,15 @@ app.get('/example2', function (req, res) {
     });
 //////////////////////////////////////////////
 //CGI functions
+app.get('/bed12ToSvgGene',function(req,res){
+	var bed12 = req.query.bed12;	
+	if(typeof bed12 === "undefined"){
+		bed12 = "chr1\t1000\t2000\tgene1\t0\t+\t1000\t2000\t0\t2\t100,200\t0,800\nchr1\t1500\t3000\tgene1\t0\t-\t1000\t2000\t0\t3\t100,200,1000\t0,200,500";
+	}
+	console.log(bed12);
+        var svg = hm.bed12_to_gene_svg( { data:bed12, id:"body"});
+	res.send(d3.select('html').node().outerHTML);
+});
 app.get('/bamToBed12',function(req,res){
     var interval = req.query.interval;
     var bam = req.query.bam;

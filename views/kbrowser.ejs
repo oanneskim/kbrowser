@@ -17,10 +17,7 @@
 		<input value="<%= rnaseq_track[i] %>"></input>
 	<% } %>
 	<li>Intervals</li>
-	<% var n= typeof interval != 'undefined' ? interval.length : 0 %>
-	<% for(var i=0; i< n; i++) { %>
-		<input value="<%= interval[i] %>"></input>
-	<% } %>
+	<textarea id="intervals" rows="10" cols="50">chr1:10000-20000</textarea>
 	<button type="submit" id="submit">Go</button>
 	<textarea id="out"></textarea>
   </body>

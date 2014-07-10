@@ -18,7 +18,7 @@ var parseBed12 = function (txt){
 	return result;
 }
 var d3=require('d3');
-var bed12ToSvg = function (params){
+var bed12_to_gene_svg = function (params){
 	var data=parseBed12(params.data); // bed12 
     var trackId=params.id;
    	var trackWidth=200,trackHeight=50;
@@ -35,8 +35,8 @@ var bed12ToSvg = function (params){
     var xScale=d3.scale.linear().range([0,trackWidth]).domain([minX,maxX]);
     var barDepth=trackHeight/data.length;
     for( i in data){
-        var n=data[i][9];
-		var start = parseInt(data[i][1]);
+        var n=parseInt(data[i][9]);
+	var start = parseInt(data[i][1]);
         var sizes = data[i][10].split(",").map(function(d){return parseInt(d);});
         var starts = data[i][11].split(",").map(function(d){return parseInt(d);}); 
         for(j=0; j < n;j++){
@@ -71,6 +71,6 @@ var bedToJSON = function (tsv){
 
 //console.log(bedToJSON(bed12_sample));
 //console.log(bedToArray(bed12_sample));
-//console.log(bed12ToSvg({data: parseBed12(bed12_sample), id:'body'}).node().outerHTML);
+//console.log(bed12_to_gene_svg({data: parseBed12(bed12_sample), id:'body'}).node().outerHTML);
 
-module.exports.bed12ToSvg = bed12ToSvg;
+module.exports.bed12_to_gene_svg = bed12_to_gene_svg;

@@ -1,0 +1,107 @@
+0 info it worked if it ends with ok
+1 verbose cli [ 'node', '/usr/bin/npm', 'install', 'node-tsv-json', '-g' ]
+2 info using npm@1.4.13
+3 info using node@v0.10.28
+4 verbose node symlink /usr/bin/node
+5 verbose cache add [ 'node-tsv-json', null ]
+6 verbose cache add name=undefined spec="node-tsv-json" args=["node-tsv-json",null]
+7 verbose parsed url { protocol: null,
+7 verbose parsed url   slashes: null,
+7 verbose parsed url   auth: null,
+7 verbose parsed url   host: null,
+7 verbose parsed url   port: null,
+7 verbose parsed url   hostname: null,
+7 verbose parsed url   hash: null,
+7 verbose parsed url   search: null,
+7 verbose parsed url   query: null,
+7 verbose parsed url   pathname: 'node-tsv-json',
+7 verbose parsed url   path: 'node-tsv-json',
+7 verbose parsed url   href: 'node-tsv-json' }
+8 silly lockFile c181cb1b-node-tsv-json node-tsv-json
+9 verbose lock node-tsv-json /home/oannes/.npm/c181cb1b-node-tsv-json.lock
+10 silly lockFile c181cb1b-node-tsv-json node-tsv-json
+11 silly lockFile c181cb1b-node-tsv-json node-tsv-json
+12 verbose addNamed [ 'node-tsv-json', '' ]
+13 verbose addNamed [ null, '*' ]
+14 silly lockFile cc690ec5-node-tsv-json node-tsv-json@
+15 verbose lock node-tsv-json@ /home/oannes/.npm/cc690ec5-node-tsv-json.lock
+16 silly addNameRange { name: 'node-tsv-json', range: '*', hasData: false }
+17 verbose registry.get node-tsv-json not expired, no request
+18 silly addNameRange number 2 { name: 'node-tsv-json', range: '*', hasData: true }
+19 silly addNameRange versions [ 'node-tsv-json', [ '0.1.0', '0.2.0', '0.2.1' ] ]
+20 verbose addNamed [ 'node-tsv-json', '0.2.1' ]
+21 verbose addNamed [ '0.2.1', '0.2.1' ]
+22 silly lockFile 6ef4d308-node-tsv-json-0-2-1 node-tsv-json@0.2.1
+23 verbose lock node-tsv-json@0.2.1 /home/oannes/.npm/6ef4d308-node-tsv-json-0-2-1.lock
+24 silly lockFile 6ef4d308-node-tsv-json-0-2-1 node-tsv-json@0.2.1
+25 silly lockFile 6ef4d308-node-tsv-json-0-2-1 node-tsv-json@0.2.1
+26 silly lockFile cc690ec5-node-tsv-json node-tsv-json@
+27 silly lockFile cc690ec5-node-tsv-json node-tsv-json@
+28 silly resolved [ { name: 'node-tsv-json',
+28 silly resolved     version: '0.2.1',
+28 silly resolved     description: 'convert tsv to json',
+28 silly resolved     main: 'index.js',
+28 silly resolved     scripts: { test: 'mocha' },
+28 silly resolved     repository:
+28 silly resolved      { type: 'git',
+28 silly resolved        url: 'https://github.com/DataGarage/node-tsv-json' },
+28 silly resolved     keywords: [ 'node', 'tsv', 'json' ],
+28 silly resolved     author:
+28 silly resolved      { name: 'chilijung',
+28 silly resolved        email: 'chilijung@gmail.com',
+28 silly resolved        url: 'http://lijung.com/' },
+28 silly resolved     license: 'MIT',
+28 silly resolved     bugs: { url: 'https://github.com/DataGarage/node-tsv-json/issues' },
+28 silly resolved     homepage: 'https://github.com/DataGarage/node-tsv-json',
+28 silly resolved     devDependencies: { should: '~3.1.2', mocha: '~1.17.1' },
+28 silly resolved     dependencies: { byline: '~4.1.1' },
+28 silly resolved     _id: 'node-tsv-json@0.2.1',
+28 silly resolved     dist:
+28 silly resolved      { shasum: '45492254428127116f03a1cef31e6555794cce5a',
+28 silly resolved        tarball: 'http://registry.npmjs.org/node-tsv-json/-/node-tsv-json-0.2.1.tgz' },
+28 silly resolved     _from: 'node-tsv-json@',
+28 silly resolved     _npmVersion: '1.4.4',
+28 silly resolved     _npmUser: { name: 'chilijung', email: 'chilijung@gmail.com' },
+28 silly resolved     maintainers: [ [Object] ],
+28 silly resolved     directories: {},
+28 silly resolved     _shasum: '45492254428127116f03a1cef31e6555794cce5a',
+28 silly resolved     _resolved: 'http://registry.npmjs.org/node-tsv-json/-/node-tsv-json-0.2.1.tgz',
+28 silly resolved     readme: 'ERROR: No README data found!' } ]
+29 info install node-tsv-json@0.2.1 into /usr/lib
+30 info installOne node-tsv-json@0.2.1
+31 info /usr/lib/node_modules/node-tsv-json unbuild
+32 verbose tar unpack /home/oannes/.npm/node-tsv-json/0.2.1/package.tgz
+33 silly lockFile 192006b2-r-lib-node-modules-node-tsv-json tar:///usr/lib/node_modules/node-tsv-json
+34 verbose lock tar:///usr/lib/node_modules/node-tsv-json /home/oannes/.npm/192006b2-r-lib-node-modules-node-tsv-json.lock
+35 silly lockFile 9d9ea829--node-tsv-json-0-2-1-package-tgz tar:///home/oannes/.npm/node-tsv-json/0.2.1/package.tgz
+36 verbose lock tar:///home/oannes/.npm/node-tsv-json/0.2.1/package.tgz /home/oannes/.npm/9d9ea829--node-tsv-json-0-2-1-package-tgz.lock
+37 silly gunzTarPerm modes [ '755', '644' ]
+38 error Error: EACCES, mkdir '/usr/lib/node_modules/node-tsv-json'
+38 error  { [Error: EACCES, mkdir '/usr/lib/node_modules/node-tsv-json']
+38 error   errno: 3,
+38 error   code: 'EACCES',
+38 error   path: '/usr/lib/node_modules/node-tsv-json',
+38 error   fstream_type: 'Directory',
+38 error   fstream_path: '/usr/lib/node_modules/node-tsv-json',
+38 error   fstream_class: 'DirWriter',
+38 error   fstream_stack:
+38 error    [ '/usr/lib/node_modules/npm/node_modules/fstream/lib/dir-writer.js:36:23',
+38 error      '/usr/lib/node_modules/npm/node_modules/mkdirp/index.js:37:53',
+38 error      'Object.oncomplete (fs.js:107:15)' ] }
+39 error Please try running this command again as root/Administrator.
+40 error System Linux 3.11.0-20-generic
+41 error command "node" "/usr/bin/npm" "install" "node-tsv-json" "-g"
+42 error cwd /home/oannes/Proj/MrBin/kbrowser/kbrowser
+43 error node -v v0.10.28
+44 error npm -v 1.4.13
+45 error path /usr/lib/node_modules/node-tsv-json
+46 error fstream_path /usr/lib/node_modules/node-tsv-json
+47 error fstream_type Directory
+48 error fstream_class DirWriter
+49 error code EACCES
+50 error errno 3
+51 error stack Error: EACCES, mkdir '/usr/lib/node_modules/node-tsv-json'
+52 error fstream_stack /usr/lib/node_modules/npm/node_modules/fstream/lib/dir-writer.js:36:23
+52 error fstream_stack /usr/lib/node_modules/npm/node_modules/mkdirp/index.js:37:53
+52 error fstream_stack Object.oncomplete (fs.js:107:15)
+53 verbose exit [ 3, true ]
