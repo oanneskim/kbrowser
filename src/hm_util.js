@@ -7,6 +7,45 @@ var bed12_headers=['chrom','start','end','name','score','strand',
 /////////////////////////////////////////////
 //  convert bed to JSON format
 ////////////////////////////////////////////
+//var c3 = require('/javascript/c3.min.js');
+var plotXy = function(param){
+	//document.write('<script src="/javascript/d3.min.js" charset="utf-8"></script>');
+	//document.write('<script src="/javascript/c3.min.js"></script>');
+	//require('./public/javascript/d3.min');
+/*
+,function(){
+	var chart = c3.generate({
+		bindto: param.id,
+		data: {
+		  columns: [
+			param.data1, param.data2
+		  ]
+		}
+	});
+		return "hi";	
+	});
+*/
+}
+var bed12_to_json = function(txt){
+	var lines=txt.split("\n");
+	var result = [];
+	for(var i=0;i<lines.length;i++){
+		var ent = lines[i].split("\t");
+		var rec = {};
+		rec['chrom'] = ent[0];
+		rec['start'] = parseInt(ent[1]); rec['end'] = parseInt(ent[2]);
+		rec['name'] = ent[3]; rec['score'] = ent[4]; rec['strand'] = ent[5];
+		rec['thickStart'] = parseInt(ent[6]); rec['thickEnd'] = parseInt(ent[7]);
+		rec['rgb'] = ent[8];
+		rec['size'] = parseInt(ent[9]);
+		rec['sizes'] =  ent[10].split(',').map(function(d){return parseInt(d);});
+		rec['starts'] =  ent[11].split(',').map(function(d){return parseInt(d);});
+		result.push(rec);	
+	}
+	return result;
+}
+
+//console.log(bed12_to_json(bed12_sample));
 
 var parseBed12 = function (txt){
 	var lines=txt.split("\n");
@@ -17,30 +56,28 @@ var parseBed12 = function (txt){
 	}
 	return result;
 }
-var d3=require('d3');
 var bed12_to_gene_svg = function (params){
-	var data=parseBed12(params.data); // bed12 
+	var d3=require('d3');
+	var data=bed12_to_json(params.data); // bed12 
     var trackId=params.id;
    	var trackWidth=200,trackHeight=50;
     var svg = d3.select(trackId).append("svg").attr("width",trackWidth).attr("height",trackHeight);
 	//var rec = svg.append("rect").attr("x",0).attr("y",0).attr("width",20).attr("height",20);
 
-    var minX=data[0][1],maxX=data[0][2];
+	
+    var minX=null,maxX=null;
     for( i in data){
-		data[i][1] = parseInt(data[i][1]);
-		data[i][2] = parseInt(data[i][2]);
-        if(data[i][1] < minX){ minX=data[i][1];}
-        if(data[i][2] > maxX){ maxX=data[i][2];}
+		
+		if( minX == null || data[i].start < minX){ minX=data[i].start;		}
+		if( maxX == null || data[i].end > maxX){ maxX=data[i].end;		}
     }   
+	console.log(minX, maxX);
     var xScale=d3.scale.linear().range([0,trackWidth]).domain([minX,maxX]);
     var barDepth=trackHeight/data.length;
     for( i in data){
-        var n=parseInt(data[i][9]);
-	var start = parseInt(data[i][1]);
-        var sizes = data[i][10].split(",").map(function(d){return parseInt(d);});
-        var starts = data[i][11].split(",").map(function(d){return parseInt(d);}); 
-        for(j=0; j < n;j++){
-			var s=xScale(start+starts[j]),e=xScale(start+starts[j]+sizes[j]);
+		d = data[i];
+        for(j=0; j < d.size;j++){
+			var s=xScale(d.start+d.starts[j]),e=xScale(d.start+d.starts[j]+d.sizes[j]);
 			var x=s,y=i*barDepth,w=e-s,h=barDepth;
             var rec = svg.append("rect").attr("x",x).attr("y",y).attr("width",w).attr("height",h);
         }
@@ -74,3 +111,4 @@ var bedToJSON = function (tsv){
 //console.log(bed12_to_gene_svg({data: parseBed12(bed12_sample), id:'body'}).node().outerHTML);
 
 module.exports.bed12_to_gene_svg = bed12_to_gene_svg;
+module.exports.plotXy= plotXy;

@@ -22,8 +22,9 @@ app.use(express.logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded());
 app.use(express.methodOverride());
-app.use(app.router);
 app.use(express.static(path.join(__dirname, 'public')));
+app.use(express.static(path.join(__dirname, '/javascript')));
+app.use(app.router);
 app.use(require('express-jquery')('/jquery.js'));
 
 // development only
@@ -76,7 +77,14 @@ app.get('/kbrowser', function (req, res) {
         var field={name:'gene_track',type:'search',property:'required',value: gene_track[i]}; 
 		fields.push(field);
 	}
-	res.render('kbrowser',{ gene_track:gene_track,rnaseq_track:rnaseq_track});
+            var x=['x', 30, 50, 100, 230, 300, 310],
+            data=[['data1', 30, 200, 100, 400, 150, 250], ['data2',130, 300, 200, 300, 250, 450]];
+	//var d3 = require('d3');
+	//res.render('plotXy',{id:JSON.stringify('##chart'),data1: JSON.stringify(data1),  data2: JSON.stringify(data2), x:JSON.stringify(x)});
+	var data1="chr1	1000	2000	gene1	0	+	1000	2000	0	2	 100,200	0,800\n\
+chr1	1500	3000	gene1	0	+	1000	2000	0	3	100,200,1000	0,200,500";
+	var svg = hm.bed12_to_gene_svg( { data:data1, id:"body"});
+	res.render('kbrowser',{ data: JSON.stringify(data), gene_track:gene_track, test:svg, rnaseq_track:rnaseq_track});
 
 /*
         res.render('form', {
@@ -88,6 +96,29 @@ app.get('/kbrowser', function (req, res) {
 });
 //////////////////////////////////////////////
 // test
+app.get('/plotXy',function(req,res){
+/*
+	var chart = c3.generate({
+		bindto: '#chart',
+    data: {
+        x: 'x',
+        columns: [
+            ['x', 30, 50, 100, 230, 300, 310],
+            ['data1', 30, 200, 100, 400, 150, 250],
+            ['data2', 130, 300, 200, 300, 250, 450]
+        ]
+    }
+	});
+*/
+//res.send(d3.select('html').node.outerHTML);
+
+            var x=['x', 30, 50, 100, 230, 300, 310],
+            data1=['data1', 30, 200, 100, 400, 150, 250],
+            data2=['data2',130, 300, 200, 300, 250, 450];
+	//var d3 = require('d3');
+	res.render('plotXy',{id:JSON.stringify('##chart'),data1: JSON.stringify(data1),  data2: JSON.stringify(data2), x:JSON.stringify(x)});
+	//res.render(d3.select('html').node.outerHTML);
+});
 app.get('/geneTrack',function(req,res){
 	//var data = <%- data %>; //[4, 8, 15, 16, 23, 42];
 	//var hm = require('./src/hm_util');

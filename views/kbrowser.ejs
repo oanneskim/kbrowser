@@ -20,11 +20,23 @@
 	<textarea id="intervals" rows="10" cols="50">chr1:10000-20000</textarea>
 	<button type="submit" id="submit">Go</button>
 	<textarea id="out"></textarea>
+
+<link href="/stylesheets/c3.css" rel="stylesheet" type="text/css">
+<div id="chip_track"></div>
+<div id="gene_track"></div>
   </body>
-    <script src="http://d3js.org/d3.v2.js"></script>
+<script src="/javascript/d3.min.js" charset="utf-8"></script>
+<script src="/javascript/c3.min.js"></script>
+<script type="text/javascript">
+	var chart = c3.generate({
+		bindto: '#chip_track',
+		data: { columns: <%-data%> }
+	});
+</script>
+<!--    <script src="http://d3js.org/d3.v2.js"></script> -->
 <script src="/javascript/jquery.min.js"></script>
+
  	<script>
-//jQuery(document).ready(function($){
 $(document).ready(function(){
   $("#submit").click(function(){
 		$.ajax({
