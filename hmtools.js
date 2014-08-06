@@ -37,15 +37,27 @@ function getBam(param,callback){
 	var interval = param.interval;
 	var bam = param.bam;
 	var name = param.name;
-
+	var res = '';
 	var spawn = require('child_process').spawn,
-    samtools    = spawn('samtools', [ 'view','-b',bam, interval]),
-    bamToBed  = spawn('bamToBed', ['-bed12']);
-
+		tool = spawn('./bin/bam_to_bed12_interval.sh', [bam,interval]);
+	tool.stdout.setEncoding('utf8');
+	tool.stdout.on('data', function (data) { res += ''+data; }); // pipeline to the next process
+	tool.on('close',function(code){
+		if (code !== 0) { console.log('bam_to_bed12_interval.sh process exited with code ' + code); }
+		var res1={name: name, res: res};
+		return callback(null, res1);
+	});
+	/*
+	var spawn = require('child_process').spawn,
+		samtools =  spawn('samtools', [ 'view','-b', bam, interval]),
+		bamToBed =  spawn('bamToBed');
+		//bamToBed =  spawn('bamToBed', [ '-bed12']);
 	var res ='';
+
+	//samtools.stdout.setEncoding('utf8');
 	samtools.stdout.on('data', function (data) { bamToBed.stdin.write(data); }); // pipeline to the next process
 	samtools.stderr.on('data', function (data) { console.log('samtools stderr: ' + data); });
-	samtools.on('exit', function (code) { 
+	samtools.on('close', function (code) { 
 		if (code !== 0) { console.log('samtools process exited with code ' + code); }
 	  	bamToBed.stdin.end();
 	}); 
@@ -57,6 +69,7 @@ function getBam(param,callback){
 		var res1={name: name, res: res  };
 		return callback(null,res1); 
 	});
+	*/
 }
 
 function getBams(param,callback){
@@ -85,6 +98,12 @@ getBams(inp,function(err,res){
 	console.log(res);
 });
 */
+
+//child = require("child_process").spawn('ls', ['-lh', '/usr']);
+//child.stdout.setEncoding('utf8');
+//child.stdout.on('data', function(data) { console.log(data); });
+
+
 //var data={ interval:'chr1:1000-20000',
 //	   tracks: [
 //		{ name : 'refGene', type : 'gene', url: "http://bentleylab.ucdenver.edu/LabUrl/hg19RefGene.bam" },
