@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/env bash
 
 make_temp(){
     mktemp 2>/dev/null || mktemp -t $0
@@ -28,4 +28,8 @@ bed12_to_splicingCounts(){
     '
 }
 	
+bam_to_bed12_interval(){
+	bam=$1; interval=$2;
+	samtools view -b $bam $interval | bamToBed -bed12
+}
 

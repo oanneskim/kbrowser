@@ -1,58 +1,60 @@
-<!DOCTYPE html>
-<html>
-  <head>
+ <head>
     <title></title>
-    <link rel='stylesheet' href='/stylesheets/style.css' />
+    <link rel='stylesheet' href='/stylesheets/c3.css' />
   </head>
-  <body>
-	<H2> K-Browser</H2>
-	<li>gene tracks</li>
-	<% var n= typeof gene_track != 'undefined' ? gene_track.length : 0 %>
-	<% for(var i=0; i< n; i++) { %>
-		<input value="<%= gene_track[i] %>"></input>
-	<% } %>
-	<li>RNASeq tracks</li>
-	<% var n= typeof rnaseq_track!= 'undefined' ? rnaseq_track.length : 0 %>
-	<% for(var i=0; i< n; i++) { %>
-		<input value="<%= rnaseq_track[i] %>"></input>
-	<% } %>
-	<li>Intervals</li>
-	<textarea id="intervals" rows="10" cols="50">chr1:10000-20000</textarea>
-	<button type="submit" id="submit">Go</button>
-	<textarea id="out"></textarea>
 
-<link href="/stylesheets/c3.css" rel="stylesheet" type="text/css">
-<div id="chip_track"></div>
-<div id="gene_track"></div>
-  </body>
+<body>
+tracks: <textarea rows="10" cols="80" id="trackinfo">
+{"interval":"chr12:6641280-6650666",
+"tracks":[
+ {"name":"c4","type":"rnaseq","bam":"http://bentleylab.ucdenver.edu/LabUrl/c41.bam"},
+ {"name":"polii_1","type":"chipseq","fragment_size":200, "bin_size":50,"bam":"http://bentleylab.ucdenver.edu/LabUrl/GSM733643_hg19_wgEncodeBroadHistoneK562Pol2bStdAlnRep1.bam"},
+ {"name":"polii_2","type":"chipseq","fragment_size":400,"color":"red", "bin_size":50,"bam":"http://bentleylab.ucdenver.edu/LabUrl/GSM733643_hg19_wgEncodeBroadHistoneK562Pol2bStdAlnRep1.bam"},
+ {"name":"gene","type":"gene","bam":"http://bentleylab.ucdenver.edu/LabUrl/hg19RefGene.bam"}
+]
+}
+</textarea></br> <button id="update">Update</button></br>
+<div id='canvas'></div>
+<div id="chart"></div>
+
+
 <script src="/javascript/d3.min.js" charset="utf-8"></script>
 <script src="/javascript/c3.min.js"></script>
-<script type="text/javascript">
-	var chart = c3.generate({
-		bindto: '#chip_track',
-		data: { columns: <%-data%> }
-	});
-</script>
-<!--    <script src="http://d3js.org/d3.v2.js"></script> -->
 <script src="/javascript/jquery.min.js"></script>
 
- 	<script>
+
+<script type="text/javascript">
 $(document).ready(function(){
-  $("#submit").click(function(){
-		$.ajax({
-			url: "/bamToBed12",
-			data: { 
-				interval: "chr1:10000-20000",
-				bam: "http://bentleylab.ucdenver.edu/LabUrl/hg19RefGene.bam"},
-			cash: false,
-			type: "GET",
-			success: function(res){
-				$("#out").text(res);
-			},
-			error: function(xhr){
-			}
+  $("#update").click(function(){
+		var str = $("#trackinfo").val();
+		$("#trackinfo").text(str);
+		var data = JSON.parse(str);
+		var request = $.ajax({
+			url: "/api/kbrowser/update",
+			async: false,
+			type: "POST", 
+			contentType: "application/x-www-form-urlencoded",
+			dataType: "json",
+			data: data 
+		});
+		request.success( function(data1){ 
+			//$("#canvas").html(data);
+			var a = data.interval.split(':')[1].split('-');
+			var chart = c3.generate({ 
+				bindto: '#chart', 
+				data: data1, 
+				subchart:{ show: true}, 
+				point: { show: false},
+				axis:{ 'y2':{ show:true}, 
+				x: { max: parseInt(a[1]),min:parseInt(a[0])}}
+			});
+		});
+		request.fail( function(jqXHR,status){ 
+			alert("darn it"+status);
 		});
   });
+	
 });
-	</script>
-</html>
+</script>
+
+</body>

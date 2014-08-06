@@ -1,0 +1,93 @@
+<!-- views/pages/about.ejs -->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<% include ../partials/head %>
+    <link rel='stylesheet' href='/stylesheets/c3.css' />
+    <link rel='stylesheet' href='/stylesheets/jquery-ui.min.css' />
+    <link rel='stylesheet' href='/stylesheets/jquery-ui.theme.min.css' />
+</head>
+<body class="container">
+
+	<header>
+		<% include ../partials/header %>
+	</header>
+
+	<main>
+		<div id="canvas">
+			<h1>This is K-Browser!!</h1>
+		</div>
+		</br><button id="update">Update</button></br>
+
+  <h3>BAM Tracks</h3>
+  <div>
+  <textarea id="tracks" cols="100" rows="10">
+{"interval":"chr12:6641280-6650666",
+"tracks":[
+ {"name":"c4","type":"rnaseq","bam":"http://bentleylab.ucdenver.edu/LabUrl/c41.bam"},
+ {"name":"polii_1","type":"chipseq","fragment_size":200, "bin_size":50,"bam":"http://bentleylab.ucdenver.edu/LabUrl/GSM733643_hg19_wgEncodeBroadHistoneK562Pol2bStdAlnRep1.bam"},
+ {"name":"polii_2","type":"chipseq","fragment_size":400,"color":"red", "bin_size":50,"bam":"http://bentleylab.ucdenver.edu/LabUrl/GSM733643_hg19_wgEncodeBroadHistoneK562Pol2bStdAlnRep1.bam"},
+ {"name":"gene","type":"gene","bam":"http://bentleylab.ucdenver.edu/LabUrl/hg19RefGene.bam"}
+]
+}
+ </textarea>
+ </div>
+  <h3>Target Genes</h3>
+			<div>
+				<textarea id="genes" cols="100" rows="10"></textarea>
+			</div>
+  <h3>Track Operations3</h3>
+  <div>
+    <p>
+		Track operations are not implemented yet.
+    </p>
+  </div>
+	</main>
+	<footer>
+		<% include ../partials/footer %>
+	</footer>
+
+<script src="/javascript/d3.min.js" charset="utf-8"></script>
+<script src="/javascript/c3.min.js"></script>
+<script src="/javascript/jquery.min.js"></script>
+<script src="/javascript/jquery-ui.min.js"></script>
+
+<script type="text/javascript">
+$(document).ready(function(){
+  $("#update").click(function(){
+		var str = $("#tracks").val();
+		$("#tracks").text(str);
+		var data = JSON.parse(str);
+		var request = $.ajax({
+			url: "/api/kbrowser/update",
+			async: false,
+			type: "POST", 
+			contentType: "application/x-www-form-urlencoded",
+			dataType: "json",
+			data: data 
+		});
+		request.success( function(data1){ 
+			//$("#canvas").html(data);
+			var a = data.interval.split(':')[1].split('-');
+			var chart = c3.generate({ 
+				size: { height: 400, width: 800},
+				bindto: '#canvas', 
+				data: data1, 
+				subchart:{ show: true}, 
+				point: { show: false},
+				axis:{ 'y2':{ show:true, max:1, min:-1}, 
+					x: { max: parseInt(a[1]),min:parseInt(a[0])}
+				}
+			});
+		});
+		request.fail( function(jqXHR,status){ 
+			alert("darn it"+status);
+		});
+  });
+	
+});
+</script>
+	
+</body>
+</html>

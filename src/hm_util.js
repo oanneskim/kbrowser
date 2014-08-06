@@ -4,6 +4,73 @@ chr1	1500	3000	gene1	0	+	1000	2000	0	3	100,200,1000	0,200,500";
 var bed12_headers=['chrom','start','end','name','score','strand',
 	'thickStart','thickEnd','itemRgb','blockCount','blockSizes','blockStarts'];
 
+// track handlers
+
+function initTrack(){ // JSON 
+	var track = {
+		name: undefined,
+		type: undefined, // ChIP-seq, RNA-Seq, PolyA-Seq, GRO-Seq ,... 
+		url: undefined,
+		color: undefined,
+		data: undefined, // raw bed file
+		x_range: undefined,
+		y_range: undefined,
+
+		height: undefined,
+		width: undefined
+	}
+	return track;
+}
+
+function cloneTrack(obj){
+	res = {};
+	for( k in obj){ res[k]=obj[k]; }
+	return res;
+}
+
+
+function bamToBed12ByInterval(param,callback){
+	// { interval:chr1:1000-2000, bam: ..} 
+   	var interval = param.interval, bam=param.bam;
+		//var cmd="samtools" + " view -b " + bam + " " + interval + " | bamToBed -bed12";
+//		var child = require('child_process').execFile('/Users/oannes/Project/Mb/Kbrowser/kbrowser/bin/bam_to_bed12_interval.sh',
+	var spawn = require('child_process').spawn,
+    samtools    = spawn('samtools', [ 'view','-b',bam, interval]),
+    bamToBed  = spawn('bamToBed', ['-bed12']);
+
+	var res ='';
+	var i=0;
+ 
+	samtools.stdout.on('data', function (data) { bamToBed.stdin.write(data); }); // pipeline to the next process
+	samtools.stderr.on('data', function (data) { console.log('samtools stderr: ' + data); });
+	samtools.on('exit', function (code) { 
+		if (code !== 0) { console.log('samtools process exited with code ' + code); }
+	  	bamToBed.stdin.end();
+	}); 
+	// this handle data buffer of size 200k
+	bamToBed.stdout.on('data', function (data) { res += '' + data; i=i+1; });
+	bamToBed.stderr.on('data', function (data) { console.log('grep stderr: ' + data); });
+	bamToBed.on('close', function (code) { 
+		if (code !== 0) { console.log('bamToBed process exited with code ' + code); }
+		callback(res);
+	});
+}
+
+/*
+var data={ interval:'chr1:1000-20000',
+	   tracks: [
+		{ name : 'refGene', type : 'gene', url: "http://bentleylab.ucdenver.edu/LabUrl/hg19RefGene.bam" },
+		{ name : 'c4', type : 'rna_seq', url: "http://bentleylab.ucdenver.edu/LabUrl/c41.bam"}
+	]
+};
+bamToBed12ByInterval({
+	interval: 'chr1:1000-15000', 
+	bam: 'http://bentleylab.ucdenver.edu/LabUrl/hg19RefGene.bam'},
+function(res){
+	console.log(res);	
+});
+*/
+
 /////////////////////////////////////////////
 //  convert bed to JSON format
 ////////////////////////////////////////////
@@ -60,7 +127,8 @@ var bed12_to_gene_svg = function (params){
 	var d3=require('d3');
 	var data=bed12_to_json(params.data); // bed12 
     var trackId=params.id;
-   	var trackWidth=200,trackHeight=50;
+   	var trackWidth=params.trackWidth,trackHeight=params.trackHeight;
+	console.log(trackWidth, trackHeight);
     var svg = d3.select(trackId).append("svg").attr("width",trackWidth).attr("height",trackHeight);
 	//var rec = svg.append("rect").attr("x",0).attr("y",0).attr("width",20).attr("height",20);
 

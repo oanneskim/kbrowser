@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title></title>
+    <link rel='stylesheet' href='/stylesheets/style.css' />
+  </head>
+  <body>
+	<H2> K-Browser</H2>
+	<H3>tracks</H3>
+	<div id="tracks"><%= JSON.stringify(tracks)%> </div>
+	<% var n= typeof tracks != 'undefined' ? tracks.length : 0 %>
+	<% for(var i=0; i< n; i++) { %>
+		<li> <%= tracks[i].name %> </li>
+	<% } %>
+	<li>Intervals</li>
+	<input id="intervals" value="chr1:10000-10220"></input>
+	<button type="submit" id="submit">Go</button>
+	<textarea id="out"></textarea>
+
+<link href="/stylesheets/c3.css" rel="stylesheet" type="text/css">
+<div id="chip_track"></div>
+<div id="gene_track"></div>
+</body>
+
+<script src="/javascript/d3.min.js" charset="utf-8"></script>
+<script src="/javascript/c3.min.js"></script>
+<!--
+<script type="text/javascript">
+	var chart = c3.generate({
+		bindto: '#chip_track',
+		data: { columns: <%-data%> }
+	});
+</script>
+-->
+<!--    <script src="http://d3js.org/d3.v2.js"></script> -->
+<script src="/javascript/jquery.min.js"></script>
+	<script>
+$(document).ready(function(){
+	console.log(tracks);
+  $("#submit").click(function(){
+		var tracks = JSON.parse($("#tracks").text())
+		for(var i in tracks){
+		$.ajax({
+			url: "/bamToBed12",
+			data: { 
+				interval: $("#interval").text(),
+				bam: tracks[i].url, //"http://bentleylab.ucdenver.edu/LabUrl/hg19RefGene.bam"
+			},
+			cash: false,
+			type: "GET",
+			success: function(res){
+				$("#tracks").text(JSON.stringify(tracks));
+				tracks[i].data= res;
+			},
+			error: function(xhr){
+				console.log('001');
+			}
+		});
+		}
+  });
+});
+	</script>
+</html>
